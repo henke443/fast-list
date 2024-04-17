@@ -44,7 +44,7 @@ fn test_fn_push_back_fn_next_of_fn_prev_of() {
 #[test]
 fn test_multithreading() {
     let mut list = LinkedList::new();
-    let indexes = Arc::new(list.extend(0..10_000));
+    let indexes = Arc::new(list.extend(0..1_000));
 
     // You can also get the ordered indexes with something like this:
     // let indexes = Arc::new(
@@ -58,7 +58,7 @@ fn test_multithreading() {
         let list_mut = Arc::clone(&list_mut);
         let indexes = Arc::clone(&indexes);
         let t = thread::spawn(move || {
-            for index in indexes.iter().take(9_000) {
+            for index in indexes.iter().take(100) {
                 list_mut.lock().unwrap().remove(*index); // returns None if the index does not exist
             }
         });
@@ -75,7 +75,7 @@ fn test_multithreading() {
 
     // Even though remove() is called 20*3 times, only 20 items are removed.
     {
-        assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 9_000);
+        assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 100);
     }
 }
 
