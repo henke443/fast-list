@@ -112,7 +112,7 @@ pub struct LinkedListItem<T> {
 
 [API documentation]: https://docs.rs/fast-list/
 [docsrs-badge]: https://img.shields.io/docsrs/fast-list
-[docsrs-url]: https://docs.rs/fast-list/latest/fast_list//fast_graph
+[docsrs-url]: https://docs.rs/fast-list/latest/fast_list
 [crates-badge]: https://img.shields.io/crates/v/fast-list.svg
 [crates-url]: https://crates.io/crates/fast-list
 [msrv-badge]: https://img.shields.io/badge/rustc-1.65+-blue.svg
