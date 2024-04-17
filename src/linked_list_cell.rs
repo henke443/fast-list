@@ -1,14 +1,15 @@
 /// Not yet implemented. This is a work in progress (highly experimental).
-
-use std::{cell::UnsafeCell, sync::{atomic::AtomicBool, Mutex, MutexGuard, PoisonError}};
+use std::{
+    cell::UnsafeCell,
+    sync::{atomic::AtomicBool, Mutex, MutexGuard, PoisonError},
+};
 
 use slotmap::SecondaryMap;
 
 use crate::{LinkedList, LinkedListIndex, LinkedListItem};
 
-
 /// The only unsafe code in this library at the moment.
-/// 
+///
 /// Assumptions:
 /// - Removing and adding items to the list is thread safe as long as the thread locks the item being removed or added.
 /// - Writing an item is safe as long as the same item is not being written to by multiple threads.
@@ -17,7 +18,7 @@ use crate::{LinkedList, LinkedListIndex, LinkedListItem};
 pub struct LinkedListCell<T: Sync + Send> {
     data: UnsafeCell<LinkedList<T>>,
     mutex: Mutex<()>,
-    item_locks: UnsafeCell<SecondaryMap<LinkedListIndex, AtomicBool>>
+    item_locks: UnsafeCell<SecondaryMap<LinkedListIndex, AtomicBool>>,
 }
 
 impl<T: Sync + Send> LinkedListCell<T> {
@@ -26,7 +27,7 @@ impl<T: Sync + Send> LinkedListCell<T> {
     }
     fn inner(&self) -> &LinkedList<T> {
         unsafe { &*self.data.get() }
-    }   
+    }
 
     fn item_locks(&self) -> &SecondaryMap<LinkedListIndex, AtomicBool> {
         unsafe { &*self.item_locks.get() }
@@ -42,18 +43,25 @@ impl<T: Sync + Send> LinkedListCell<T> {
             return ();
         }
         if !self.item_locks().contains_key(index) {
-            self.item_locks_mut().insert(index, AtomicBool::new(false)); 
+            self.item_locks_mut().insert(index, AtomicBool::new(false));
         }
-        while unsafe { self.item_locks_mut().get_unchecked_mut(index) }.swap(true, std::sync::atomic::Ordering::Acquire) {
+        while unsafe { self.item_locks_mut().get_unchecked_mut(index) }
+            .swap(true, std::sync::atomic::Ordering::Acquire)
+        {
             std::hint::spin_loop();
         }
     }
 
     fn unlock_item(&self, index: LinkedListIndex) {
-        unsafe { self.item_locks_mut().get_unchecked_mut(index) }.store(false, std::sync::atomic::Ordering::Release);
+        unsafe { self.item_locks_mut().get_unchecked_mut(index) }
+            .store(false, std::sync::atomic::Ordering::Release);
     }
 
-    pub fn get_mut<F: Fn(&mut LinkedListItem<T>)>(&self, index: LinkedListIndex, cb: F) -> Option<()> {
+    pub fn get_mut<F: Fn(&mut LinkedListItem<T>)>(
+        &self,
+        index: LinkedListIndex,
+        cb: F,
+    ) -> Option<()> {
         let inner = unsafe { self.inner_mut() };
         self.lock_item(index);
         cb(inner.get_mut(index)?);
@@ -64,12 +72,12 @@ impl<T: Sync + Send> LinkedListCell<T> {
     pub fn get(&self, index: LinkedListIndex) -> Option<&LinkedListItem<T>> {
         self.inner().get(index)
     }
-    
+
     pub fn new(list: LinkedList<T>) -> Self {
-        LinkedListCell { 
-            data: UnsafeCell::new(list), 
-            mutex: Mutex::new(()), 
-            item_locks: UnsafeCell::new(SecondaryMap::new()) 
+        LinkedListCell {
+            data: UnsafeCell::new(list),
+            mutex: Mutex::new(()),
+            item_locks: UnsafeCell::new(SecondaryMap::new()),
         }
     }
     /// Thread-safe assuming that the functions that modify the length of the list lock the thread.
@@ -122,4 +130,3 @@ impl<T: Sync + Send> LinkedListCell<T> {
 
 unsafe impl<T: Sync + Send> Sync for LinkedListCell<T> {}
 unsafe impl<T: Sync + Send> Send for LinkedListCell<T> {}
-

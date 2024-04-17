@@ -50,7 +50,7 @@ impl<T> LinkedList<T> {
     pub fn contains_key(&self, index: LinkedListIndex) -> bool {
         self.items.contains_key(index)
     }
-    
+
     /// Get the first item in the list.
     #[inline]
     pub fn head(&self) -> Option<&LinkedListItem<T>> {
@@ -271,7 +271,6 @@ impl<T> LinkedList<T> {
             let old_tail = self.items.remove(old_tail);
 
             if let Some(old_tail) = old_tail {
-
                 self.tail = old_tail.prev_index;
 
                 match old_tail.prev_index {
@@ -285,12 +284,11 @@ impl<T> LinkedList<T> {
                         self.head = None;
                     }
                 }
-    
+
                 Some(old_tail.value)
             } else {
                 None
             }
-
         })
     }
 
@@ -500,7 +498,13 @@ impl<T> LinkedList<T> {
 
 #[cfg(test)]
 mod tests {
-    use std::{sync::{atomic::{AtomicI32, Ordering}, Arc, Mutex}, thread};
+    use std::{
+        sync::{
+            atomic::{AtomicI32, Ordering},
+            Arc, Mutex,
+        },
+        thread,
+    };
 
     use crossbeam::epoch::Atomic;
 
@@ -529,12 +533,12 @@ mod tests {
     }
 
     /// Demonstrates the ABA problem.
-    /// 
-    /// Note on locking threads: 
+    ///
+    /// Note on locking threads:
     /// Many real-world implementations of mutexes,
-    /// including std::sync::Mutex on some platforms, 
-    /// briefly behave like a spin lock before asking the operating system to put a thread to sleep. 
-    /// This is an attempt to combine the best of both worlds, 
+    /// including std::sync::Mutex on some platforms,
+    /// briefly behave like a spin lock before asking the operating system to put a thread to sleep.
+    /// This is an attempt to combine the best of both worlds,
     /// although it depends entirely on the specific use case whether this behavior is beneficial or not.
     /// https://marabos.nl/atomics/building-spinlock.html
     #[test]
@@ -546,7 +550,7 @@ mod tests {
         // let indexes = Arc::new(
         //     list.cursor_next(list.head.unwrap()).collect::<Vec<_>>()
         // );
-     
+
         let list_mut = Arc::new(Mutex::new(list));
 
         let mut threads = Vec::new();
@@ -554,7 +558,7 @@ mod tests {
             let list_mut = Arc::clone(&list_mut);
             let indexes = Arc::clone(&indexes);
             let t = thread::spawn(move || {
-                for index in indexes.iter().take(9_000)  {
+                for index in indexes.iter().take(9_000) {
                     list_mut.lock().unwrap().remove(*index); // returns None if the index does not exist
                 }
             });
@@ -564,7 +568,6 @@ mod tests {
         {
             assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 0);
         }
-        
 
         for t in threads {
             t.join().unwrap();
@@ -584,7 +587,7 @@ mod tests {
     //     let values = (0..1000).map(|v| v).collect::<Vec<_>>();
     //     let list = Arc::new(LinkedListCell::new(LinkedList::new()));
     //     let indexes = Arc::new(list.extend(values));
-        
+
     //     let mut threads = Vec::new();
     //     for _ in 0..3 {
     //         let list = Arc::clone(&list);
@@ -602,7 +605,6 @@ mod tests {
     //         assert_eq!(list.head().unwrap().value, 0);
     //         assert_eq!(list.get(indexes[200]).unwrap().value, 200);
     //     }
-        
 
     //     for t in threads {
     //         t.join().unwrap();
