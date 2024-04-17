@@ -495,4 +495,3 @@ impl<T> LinkedList<T> {
         new_list
     }
 }
-
