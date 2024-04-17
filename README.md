@@ -1,11 +1,15 @@
 # Fast Linked List
 A fast doubly linked list using [`SlotMap`] for better cache performance and to solve the ABA problem.
 
-- [x] On average ~2-3x faster than the standard [`LinkedList`](https://doc.rust-lang.org/std/collections/struct.LinkedList.html) for all operations.
-- [x] On average ~2-3x faster than [`Vec`] & [`VecDeque`] for random insertions (random removals are about the same as of now)
-- [x] Only slightly slower than [`Vec`] & [`VecDeque`] for most other operations.
-- [x] Safe against [ABA problem] by using a [`SlotMap`] internally, which means you can safely iterate & mutate the list across multiple threads. An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
-- [x] Written in 100% safe Rust.
+✅ On average ~2-3x faster than the standard [`LinkedList`](https://doc.rust-lang.org/std/collections/struct.LinkedList.html) for all operations.
+
+✅ On average ~2-3x faster than [`Vec`] & [`VecDeque`] for random insertions (random removals are about the same as of now)
+
+✅ Only slightly slower than [`Vec`] & [`VecDeque`] for most other operations.
+
+✅ Safe against [ABA problem] by using a [`SlotMap`] internally, which means you can safely iterate & mutate the list across multiple threads. An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
+
+✅ Written in 100% safe Rust.
 
 [ABA problem]: https://en.wikipedia.org/wiki/ABA_problem
 [`SlotMap`]: https://docs.rs/slotmap/latest/slotmap/index.html
