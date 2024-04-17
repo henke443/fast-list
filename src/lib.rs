@@ -64,6 +64,7 @@
 //! }
 //!
 //! ```
+//! 
 //! # Structure
 //!
 //!  [`LinkedList`] - The main struct that holds the list.

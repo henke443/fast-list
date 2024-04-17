@@ -23,6 +23,53 @@ fast-list
 [`Vec`]: https://doc.rust-lang.org/std/vec/struct.Vec.html
 [`VecDeque`]: https://doc.rust-lang.org/std/collections/struct.VecDeque.html
 
+# Examples
+
+## Multithreaded iteration & mutation
+
+```rust
+use fast_list::LinkedList;
+use std::thread;
+use std::sync::{Arc, Mutex};
+
+let mut list = LinkedList::new();
+let indexes = Arc::new(list.extend(0..10_000));
+
+// You can also get the ordered indexes with something like this:
+// let indexes = Arc::new(
+//     list.cursor_next(list.head.unwrap()).collect::<Vec<_>>()
+// );
+
+let list_mut = Arc::new(Mutex::new(list));
+
+let mut threads = Vec::new();
+for _ in 0..3 {
+    let list_mut = Arc::clone(&list_mut);
+    let indexes = Arc::clone(&indexes);
+    let t = thread::spawn(move || {
+        for index in indexes.iter().take(9_000)  {
+            list_mut.lock().unwrap().remove(*index); // returns None if the index does not exist
+        }
+    });
+    threads.push(t);
+}
+
+{
+    assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 0);
+}
+
+
+for t in threads {
+    t.join().unwrap();
+}
+
+// Even though remove() is called 9000*3 times, only 9000 items are removed.
+{
+    assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 9_000);
+}
+
+```
+
 
 # Structure
 
