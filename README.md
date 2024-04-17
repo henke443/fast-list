@@ -1,6 +1,6 @@
 fast-list
 =========
-### A fast doubly linked list using [`SlotMap`] for better cache performance and to solve the ABA problem.
+### A doubly linked list using [`SlotMap`] for improved cache locality, and to solve the ABA problem.
 
 [![Crates.io][crates-badge]][crates-url]
 [![docs.rs][docsrs-badge]][docsrs-url]

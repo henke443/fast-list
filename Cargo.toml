@@ -1,6 +1,6 @@
 [package]
 name = "fast-list"
-description = " A fast doubly linked list using SlotMap for better cache performance and to solve the ABA problem."
+description = "A doubly linked list using SlotMap for improved cache locality, and to solve the ABA problem."
 documentation = "https://docs.rs/fast-list"
 readme = "README.md"
 homepage = "https://github.com/henke443/fast-list"

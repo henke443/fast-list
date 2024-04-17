@@ -1,8 +1,8 @@
 #![crate_name = "fast_list"]
 
 //! # fast-list
-//!
-//! A fast doubly linked list using SlotMap for better cache performance and to solve the ABA problem.
+//! 
+//! ### A doubly linked list using [`SlotMap`] for improved cache locality, and to solve the ABA problem.
 //!
 //! ✅ On average ~2-3x faster than `std::collections::LinkedList` for all operations.
 //!
