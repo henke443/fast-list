@@ -68,3 +68,10 @@ pub struct LinkedListItem<T> {
 [`LinkedListIndex`]: https://docs.rs/fast_list/latest/struct.LinkedListIndex.html
 [`LinkedListWalker`]: https://docs.rs/fast_list/latest/struct.LinkedListWalker.html
 
+[API documentation]: https://docs.rs/fast-list/
+[docsrs-badge]: https://img.shields.io/docsrs/fast-list
+[docsrs-url]: https://docs.rs/fast-list/latest/fast_graph
+[crates-badge]: https://img.shields.io/crates/v/fast-list.svg
+[crates-url]: https://crates.io/crates/fast-list
+[msrv-badge]: https://img.shields.io/badge/rustc-1.75+-blue.svg
+[RELEASES]: RELEASES.rst
