@@ -4,38 +4,29 @@ use slotmap::{new_key_type, SecondaryMap, SlotMap, SparseSecondaryMap};
 use crate::{LinkedListWalker, Walker};
 
 new_key_type! {
+    /// A newtype for the index of an item in the list.
     pub struct LinkedListIndex;
 }
 
 #[derive(Debug)]
 pub struct LinkedListItem<T> {
+    /// The index of the item in the list.
     pub index: LinkedListIndex,
+    /// The value of the item.
     pub value: T,
+    /// The index of the next item in the list.
     pub next_index: Option<LinkedListIndex>,
+    /// The index of the previous item in the list.
     pub prev_index: Option<LinkedListIndex>,
 }
 
-/**
-# Associated data
-With slotmap you can get `SecondaryMap<K, V>` for any V for the same K.\
-
-We want to store a `Vec<SecondaryMap<K, V>` for any K and mixed V.\
-
-One solution would be to use an `Enum` for `V`, but that would induce some overhead.\
-For example, if you store a `Enum{Boolean(bool), ReallyBigStruct{...}}``
-then the size of the Enum will be `C + sizeof(ReallyBigStruct)`.
-
-We might be able to somewhat mitigate this by saying that
-`V: EnumContaining<X>` where `T: Associate<K, V>` implies that `T` can be turned into a value of Option<V> for any possible V (but it will be None for all V except one).
-Or alternatively, we can say tha:
-`V: Into<ParentEnum>
- */
-pub trait TodoTrait {}
-
-/// A doubly linked list using SlotMap for better cache performance than a linked list using pointers and which also solves the ABA problem.
+/// A doubly linked list using SlotMap for better cache performance than a linked list using pointers, and which also solves the ABA problem.
 pub struct LinkedList<T = ()> {
+    /// The index of the first item in the list.
     pub head: Option<LinkedListIndex>,
+    /// The index of the last item in the list.
     pub tail: Option<LinkedListIndex>,
+    /// The items in the list.
     items: SlotMap<LinkedListIndex, LinkedListItem<T>>,
 }
 
@@ -55,18 +46,12 @@ impl<T> LinkedList<T> {
         }
     }
 
-    // pub fn head_index(&self) -> Option<LinkedListIndex> {
-    //     self.head
-    // }
-
-    // pub fn tail_index(&self) -> Option<LinkedListIndex> {
-    //     self.tail
-    // }
-
+    /// Checks if the list contains the given index.
     pub fn contains_key(&self, index: LinkedListIndex) -> bool {
         self.items.contains_key(index)
     }
     
+    /// Get the first item in the list.
     #[inline]
     pub fn head(&self) -> Option<&LinkedListItem<T>> {
         if let Some(head) = self.head {
@@ -76,6 +61,7 @@ impl<T> LinkedList<T> {
         }
     }
 
+    /// Get a mutable reference to the first item in the list.
     #[inline]
     pub fn head_mut(&mut self) -> Option<&mut LinkedListItem<T>> {
         if let Some(head) = self.head {
@@ -85,6 +71,7 @@ impl<T> LinkedList<T> {
         }
     }
 
+    /// Get the last item in the list.
     #[inline]
     pub fn tail(&self) -> Option<&LinkedListItem<T>> {
         if let Some(tail) = self.tail {
@@ -94,6 +81,7 @@ impl<T> LinkedList<T> {
         }
     }
 
+    /// Get a mutable reference to the last item in the list.
     #[inline]
     pub fn tail_mut(&mut self) -> Option<&mut LinkedListItem<T>> {
         if let Some(tail) = self.tail {
@@ -346,23 +334,27 @@ impl<T> LinkedList<T> {
         self.iter_next(self.head.unwrap())
     }
 
+    /// Returns an iterator that iterates over the items of the list in no particular order.
     #[inline]
     pub fn iter_unordered(&self) -> impl Iterator<Item = &LinkedListItem<T>> {
         self.items.values()
     }
 
+    /// Returns an iterator that iterates over the items of the list.
     #[inline]
     pub fn iter_next(&self, start: LinkedListIndex) -> impl Iterator<Item = &LinkedListItem<T>> {
         self.cursor_next(start)
             .map(move |index| self.items.get(index).unwrap())
     }
 
+    /// Returns an iterator that iterates over the items of the list in reverse order.
     #[inline]
     pub fn iter_prev(&self, start: LinkedListIndex) -> impl Iterator<Item = &LinkedListItem<T>> {
         self.cursor_prev(start)
             .map(move |index| self.items.get(index).unwrap())
     }
 
+    /// Returns an iterator that iterates over the indexes of the list.
     pub fn cursor_next(
         &self,
         start: LinkedListIndex,
@@ -373,6 +365,7 @@ impl<T> LinkedList<T> {
         })
     }
 
+    /// Returns an iterator that iterates over the indexes of the list in reverse order.
     pub fn cursor_prev(
         &self,
         start: LinkedListIndex,
@@ -382,19 +375,6 @@ impl<T> LinkedList<T> {
             items.get(*index).and_then(move |item| item.prev_index)
         })
     }
-
-    /* // TODO
-    Splits the list into two at the given index. Returns a new list containing everything after the given index, excluding the index.
-    This operation should compute in O(n) time.
-    */
-    // pub fn split_off_ex(&mut self, index: LinkedListIndex) -> Self {
-    //     let mut new_list = Self::new();
-    //     let mut walker = LinkedListWalker::new(&self, index, false);
-    //     while let Some(next) = walker.walk_next(&new_list) {
-    //         self.remove(next).map(|item| new_list.items.insert(item));
-    //     }
-    //     return new_list
-    // }
 
     /// Splits the list into two at the given index. Returns a new list containing everything after the given index, including the index.
     /// This operation should compute in O(n) time.
@@ -462,7 +442,6 @@ impl<T> LinkedList<T> {
     }
 
     /// Remove an item from the list, returning the value at the key if the key was not previously removed.
-
     pub fn remove(&mut self, index: LinkedListIndex) -> Option<LinkedListItem<T>> {
         let item = self.items.remove(index)?;
 
@@ -485,6 +464,9 @@ impl<T> LinkedList<T> {
         Some(item)
     }
 
+    /// Retain only the elements specified by the predicate.
+    /// This operation should compute in O(n) time.
+    /// Modifies the list in place.
     pub fn retain_mut<F>(&mut self, mut f: F)
     where
         F: FnMut(&T) -> bool,
@@ -500,6 +482,7 @@ impl<T> LinkedList<T> {
         }
     }
 
+    /// Returns a cloned list retaining only the elements specified by the predicate.
     pub fn retain<F>(&self, mut f: F) -> Self
     where
         F: FnMut(&T) -> bool,
