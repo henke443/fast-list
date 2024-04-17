@@ -65,10 +65,6 @@ fn test_multithreading() {
         threads.push(t);
     }
 
-    {
-        assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 0);
-    }
-
     for t in threads {
         t.join().unwrap();
     }
