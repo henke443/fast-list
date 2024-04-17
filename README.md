@@ -115,5 +115,5 @@ pub struct LinkedListItem<T> {
 [docsrs-url]: https://docs.rs/fast-list/latest/fast_graph
 [crates-badge]: https://img.shields.io/crates/v/fast-list.svg
 [crates-url]: https://crates.io/crates/fast-list
-[msrv-badge]: https://img.shields.io/badge/rustc-1.64+-blue.svg
+[msrv-badge]: https://img.shields.io/badge/rustc-1.65+-blue.svg
 [RELEASES]: RELEASES.rst
