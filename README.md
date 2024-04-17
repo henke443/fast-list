@@ -65,6 +65,6 @@ pub struct LinkedListItem<T> {
 
 [`LinkedListItem`]: https://docs.rs/fast_list/latest/struct.LinkedListItem.html
 [`LinkedList`]: https://docs.rs/fast_list/latest/struct.LinkedList.html
-[`LinkedListIndex`] : https://docs.rs/fast_list/latest/struct.LinkedListIndex.html
+[`LinkedListIndex`]: https://docs.rs/fast_list/latest/struct.LinkedListIndex.html
 [`LinkedListWalker`]: https://docs.rs/fast_list/latest/struct.LinkedListWalker.html
 
