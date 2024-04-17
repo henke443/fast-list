@@ -1,6 +1,6 @@
 [package]
 name = "fast-list"
-description = "A fast, lightweight and extensible implementation of a graph data structure."
+description = " A fast doubly linked list using SlotMap for better cache performance and to solve the ABA problem."
 documentation = "https://docs.rs/fast-list"
 readme = "README.md"
 homepage = "https://github.com/henke443/fast-list"
@@ -9,7 +9,7 @@ version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
 categories = ["data-structures", "database"]
-keywords = ["graph", "slotmap", "data-structure", "linked-list", "list", "fast"]
+keywords = ["graph", "slotmap", "data-structure", "linked-list", "list"]
 
 [[bench]]
 name = "fast_list"
