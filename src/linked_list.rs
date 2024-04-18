@@ -1,6 +1,7 @@
 use core::fmt;
 use slotmap::{new_key_type, SecondaryMap, SlotMap, SparseSecondaryMap};
 
+#[cfg(feature = "unstable")]
 use crate::{LinkedListWalker, Walker};
 
 new_key_type! {
@@ -337,19 +338,35 @@ impl<T> LinkedList<T> {
     /// Returns an iterator that iterates over the items of the list.
     #[inline]
     pub fn iter_next(&self, start: LinkedListIndex) -> impl Iterator<Item = &LinkedListItem<T>> {
-        self.cursor_next(start)
+        self.cursor_iter_next(start)
             .map(move |index| self.items.get(index).unwrap())
     }
 
     /// Returns an iterator that iterates over the items of the list in reverse order.
     #[inline]
     pub fn iter_prev(&self, start: LinkedListIndex) -> impl Iterator<Item = &LinkedListItem<T>> {
-        self.cursor_prev(start)
+        self.cursor_iter_prev(start)
             .map(move |index| self.items.get(index).unwrap())
     }
 
-    /// Returns an iterator that iterates over the indexes of the list.
+    /// Returns the next index of the item with the given index.
     pub fn cursor_next(
+        &self,
+        item: LinkedListIndex,
+    ) -> Option<LinkedListIndex> {
+        self.items.get(item).and_then(|item| item.next_index)
+    }
+
+    /// Returns the previous index of the item with the given index.
+    pub fn cursor_prev(
+        &self,
+        item: LinkedListIndex,
+    ) -> Option<LinkedListIndex> {
+        self.items.get(item).and_then(|item| item.next_index)
+    }
+
+    /// Returns an iterator that iterates over the indexes of the list.
+    pub fn cursor_iter_next(
         &self,
         start: LinkedListIndex,
     ) -> impl Iterator<Item = LinkedListIndex> + '_ {
@@ -360,7 +377,7 @@ impl<T> LinkedList<T> {
     }
 
     /// Returns an iterator that iterates over the indexes of the list in reverse order.
-    pub fn cursor_prev(
+    pub fn cursor_iter_prev(
         &self,
         start: LinkedListIndex,
     ) -> impl Iterator<Item = LinkedListIndex> + '_ {
@@ -379,14 +396,27 @@ impl<T> LinkedList<T> {
     /// retrieved by iterating from the head & tail of the new list.
     pub fn split_off(&mut self, index: LinkedListIndex) -> Self {
         let mut new_list = Self::new();
-        let mut walker = LinkedListWalker::new(&self, index, false);
+        // let mut walker = LinkedListWalker::new(&self, index, false);
+
+        // let first = self.remove(index);
+        // if let Some(first) = first {
+        //     new_list.push_back(first.value);
+        // }
+        // while let Some(next) = walker.walk_next(&new_list) {
+        //     self.remove(next).map(|item| new_list.push_back(item.value));
+        // }
+        let mut current = index;
+
 
         let first = self.remove(index);
         if let Some(first) = first {
             new_list.push_back(first.value);
         }
-        while let Some(next) = walker.walk_next(&new_list) {
-            self.remove(next).map(|item| new_list.push_back(item.value));
+        while let Some(next) = self.cursor_next(current) {
+            let removed = self.remove(next);
+            if let Some(removed) = removed {
+                new_list.push_back(removed.value);
+            }
         }
         return new_list;
     }
@@ -394,10 +424,18 @@ impl<T> LinkedList<T> {
     /// Returns the nth index by iterating from the head or tail, whichever is closer.
     #[inline]
     pub fn nth(&self, n: usize) -> Option<LinkedListIndex> {
-        if n < self.len() / 2 {
-            self.cursor_next(self.head.unwrap()).nth(n)
+        let len = self.len();
+
+        if n >= len {
+            return None;
+        }
+        if len == 0 {
+            return None;
+        }
+        if n < len / 2 {
+            self.cursor_iter_next(self.head.unwrap()).nth(n)
         } else {
-            self.cursor_prev(self.tail.unwrap()).nth(self.len() - n - 1)
+            self.cursor_iter_prev(self.tail.unwrap()).nth(len - n - 1)
         }
     }
 

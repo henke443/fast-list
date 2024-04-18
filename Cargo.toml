@@ -24,6 +24,7 @@ hashbrown = {version = "0.14.3", optional = true, features=["inline-more", "ahas
 default = ["hashbrown",  "std"]
 hashbrown = ["dep:hashbrown"]
 std = []
+unstable = []
 
 [dev-dependencies]
 criterion = "0.5.1"
