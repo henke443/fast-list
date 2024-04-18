@@ -167,9 +167,7 @@ impl<T> LinkedList<T> {
 
         if let Some(next) = next_index {
             // If the element we insert after has a next element, we need to update the next element's `prev` to point to the new element.
-            if let Some(next) = items.get_mut(next) {
-                next.prev_index = Some(new_index);
-            }
+            items.get_mut(next).unwrap().prev_index = Some(new_index);
         } else {
             // If the element we insert after does not have a next element, we need to update the tail to point to the new element.
             self.tail = Some(new_index);
@@ -199,9 +197,7 @@ impl<T> LinkedList<T> {
 
         if let Some(prev) = prev_index {
             // If the element we insert before has a previous element, we need to update the previous element's `next` to point to the new element.
-            if let Some(prev) = items.get_mut(prev) {
-                prev.next_index = Some(new_index);
-            }
+            items.get_mut(prev).unwrap().next_index = Some(new_index);
         } else {
             // If the element we insert before does not have a previous element, we need to update the head to point to the new element.
             self.head = Some(new_index);
@@ -251,9 +247,7 @@ impl<T> LinkedList<T> {
         match self.head {
             Some(head) => {
                 let head = self.items.get_mut(head);
-                if let Some(head) = head {
-                    head.prev_index = Some(index);
-                }
+                head.unwrap().prev_index = Some(index);
             }
             None => {
                 self.tail = Some(index);
@@ -276,9 +270,7 @@ impl<T> LinkedList<T> {
                 match old_tail.prev_index {
                     Some(prev) => {
                         let prev_mut = self.items.get_mut(prev);
-                        if let Some(prev) = prev_mut {
-                            prev.next_index = None;
-                        }
+                        prev_mut.unwrap().next_index = None
                     }
                     None => {
                         self.head = None;
