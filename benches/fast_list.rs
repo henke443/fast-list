@@ -2,7 +2,7 @@ use criterion::{criterion_group, criterion_main, Criterion};
 #[cfg(feature = "unstable")]
 use linked_list::{LinkedListWalker, Walker};
 
-use fast_list::{LinkedList as FastLinkedList};
+use fast_list::LinkedList as FastLinkedList;
 use std::collections::LinkedList as StdLinkedList;
 use std::collections::VecDeque;
 use std::vec::Vec;

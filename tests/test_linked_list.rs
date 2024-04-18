@@ -27,9 +27,9 @@ fn test_readme_example_1() {
     assert_eq!(list.head().unwrap().value, 42);
 
     assert_eq!(list.iter().count(), 102); // 101 items from our range, one item from push_back
-    // These two iterators are equivalent
+                                          // These two iterators are equivalent
     assert_eq!(
-        list.iter_next(list.head.unwrap()).count(), 
+        list.iter_next(list.head.unwrap()).count(),
         list.iter().count()
     );
 }
@@ -37,40 +37,39 @@ fn test_readme_example_1() {
 #[test]
 fn test_readme_example_2() {
     use fast_list::LinkedList;
-    use std::thread;
     use std::sync::{Arc, Mutex};
-    
+    use std::thread;
+
     let mut list = LinkedList::new();
     let indexes = Arc::new(list.extend(0..10_000));
-    
+
     // You can also get the ordered indexes with something like this:
     // let indexes = Arc::new(
     //     list.cursor_next(list.head.unwrap()).collect::<Vec<_>>()
     // );
-    
+
     let list_mut = Arc::new(Mutex::new(list));
-    
+
     let mut threads = Vec::new();
     for _ in 0..3 {
         let list_mut = Arc::clone(&list_mut);
         let indexes = Arc::clone(&indexes);
         let t = thread::spawn(move || {
-            for index in indexes.iter().take(9_000)  {
+            for index in indexes.iter().take(9_000) {
                 list_mut.lock().unwrap().remove(*index); // returns None if the index does not exist
             }
         });
         threads.push(t);
     }
-    
+
     for t in threads {
         t.join().unwrap();
     }
-    
+
     // Even though remove() is called 9000*3 times, only 9000 items are removed.
     {
         assert_eq!(list_mut.lock().unwrap().head().unwrap().value, 9_000);
     }
-    
 }
 
 #[test]

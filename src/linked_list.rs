@@ -350,18 +350,12 @@ impl<T> LinkedList<T> {
     }
 
     /// Returns the next index of the item with the given index.
-    pub fn cursor_next(
-        &self,
-        item: LinkedListIndex,
-    ) -> Option<LinkedListIndex> {
+    pub fn cursor_next(&self, item: LinkedListIndex) -> Option<LinkedListIndex> {
         self.items.get(item).and_then(|item| item.next_index)
     }
 
     /// Returns the previous index of the item with the given index.
-    pub fn cursor_prev(
-        &self,
-        item: LinkedListIndex,
-    ) -> Option<LinkedListIndex> {
+    pub fn cursor_prev(&self, item: LinkedListIndex) -> Option<LinkedListIndex> {
         self.items.get(item).and_then(|item| item.next_index)
     }
 
@@ -406,7 +400,6 @@ impl<T> LinkedList<T> {
         //     self.remove(next).map(|item| new_list.push_back(item.value));
         // }
         let mut current = index;
-
 
         let first = self.remove(index);
         if let Some(first) = first {
