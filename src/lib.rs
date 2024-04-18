@@ -10,7 +10,7 @@
 //!
 //! ✅ Only slightly slower than `Vec` & `VecDeque` for most other operations.
 //!
-//! ✅ Safe against [ABA problem] by using a [SlotMaps] internally, which means you can safely iterate & mutate the list across multiple threads.
+//! ✅ Safe against [ABA problem] by using a [SlotMaps] internally, which makes it safer to iterate & mutate the list across multiple threads.
 //! An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
 //!
 //! ✅ Using indices into a stack allocated arena (slotmap) instead of pointers for improved cache locality.

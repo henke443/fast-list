@@ -14,7 +14,7 @@ fast-list
 
 ✅ Only slightly slower than [`Vec`] & [`VecDeque`] for most other operations.
 
-✅ Safe against [ABA problem] by using a [`SlotMap`] internally, which means you can safely iterate & mutate the list across multiple threads. An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
+✅ Safe against [ABA problem] by using a [`SlotMap`] internally, which makes it safer to iterate & mutate the list across multiple threads. An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
 
 ✅ Written in 100% safe Rust.
 
