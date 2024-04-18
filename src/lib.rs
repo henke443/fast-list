@@ -19,29 +19,29 @@
 //!
 //!
 //! # Examples
-//! 
+//!
 //! ## Basic example
 //! ```rust
 //! use fast_list::LinkedList;
-//! 
+//!
 //! // the extend() function accepts an iterator over T (i32 in this case)
 //! let mut list = LinkedList::new();
-//! list.extend(0..100);
-//! 
+//! list.extend(0..=100);
+//!
 //! assert_eq!(list.head().unwrap().value, 0);
 //! assert_eq!(list.tail().unwrap().value, 100);
-//! 
+//!
 //! list.push_front(42);
 //! assert_eq!(list.head().unwrap().value, 42);
-//! 
-//! assert_eq!(list.iter().count(), 101); // 100 items from our range, one item from push_back
+//!
+//! assert_eq!(list.iter().count(), 102); // 101 items from our range, one item from push_back
 //! // These two iterators are equivalent
 //! assert_eq!(
-//!     list.iter_next(list.head.unwrap()).count(), 
+//!     list.iter_next(list.head.unwrap()).count(),
 //!     list.iter().count()
 //! );
 //! ```
-//! 
+//!
 //! ## Multithreaded iteration & mutation
 //! ```rust
 //! use fast_list::LinkedList;
@@ -121,7 +121,6 @@
 //! ```
 //!
 //!  [`LinkedListWalker`] - **\[unstable\]** A walker type (like in petgraph) which can be used to iterate over the list.
-
 
 mod linked_list;
 mod walker;
