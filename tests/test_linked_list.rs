@@ -6,7 +6,6 @@ use std::{
     thread,
 };
 
-
 //use crate::LinkedListCell;
 
 use fast_list::{LinkedList, LinkedListIndex};
