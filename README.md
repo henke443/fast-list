@@ -125,12 +125,11 @@ pub struct LinkedListItem<T> {
 }
 ```
 
- [`LinkedListWalker`] - **\[unstable\]** A walker type (like in petgraph) which can be used to iterate over the list.
+ `LinkedListWalker` - **\[feature = "unstable"\]** A walker type (like in petgraph) which can be used to iterate over the list. 
 
 [`LinkedListItem`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedListItem.html
 [`LinkedList`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedList.html
 [`LinkedListIndex`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedListIndex.html
-[`LinkedListWalker`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedListWalker.html
 
 [API documentation]: https://docs.rs/fast-list/
 [docsrs-badge]: https://img.shields.io/docsrs/fast-list
