@@ -14,7 +14,7 @@ fast-list
 
 ✅ Only slightly slower than [`Vec`] & [`VecDeque`] for most other operations.
 
-✅ Safe against [ABA problem] by using a [`SlotMap`] internally, which means you can safely iterate & mutate the list across multiple threads. An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
+✅ Safe against [ABA problem] by using a [`SlotMap`] internally, which makes it safer to iterate & mutate the list across multiple threads. An advantage over just using a SlotMap is that the order when iterating is not arbitrary.
 
 ✅ Written in 100% safe Rust.
 
@@ -127,10 +127,10 @@ pub struct LinkedListItem<T> {
 
  [`LinkedListWalker`] - **\[unstable\]** A walker type (like in petgraph) which can be used to iterate over the list.
 
-[`LinkedListItem`]: https://docs.rs/fast_list/latest/fast_list/struct.LinkedListItem.html
-[`LinkedList`]: https://docs.rs/fast_list/latest/fast_list/struct.LinkedList.html
-[`LinkedListIndex`]: https://docs.rs/fast_list/latest/fast_list/struct.LinkedListIndex.html
-[`LinkedListWalker`]: https://docs.rs/fast_list/latest/fast_list/struct.LinkedListWalker.html
+[`LinkedListItem`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedListItem.html
+[`LinkedList`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedList.html
+[`LinkedListIndex`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedListIndex.html
+[`LinkedListWalker`]: https://docs.rs/fast-list/latest/fast_list/struct.LinkedListWalker.html
 
 [API documentation]: https://docs.rs/fast-list/
 [docsrs-badge]: https://img.shields.io/docsrs/fast-list
