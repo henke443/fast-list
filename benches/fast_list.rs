@@ -1,5 +1,8 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use fast_list::{LinkedList as FastLinkedList, LinkedListWalker, Walker};
+#[cfg(feature = "unstable")]
+use linked_list::{LinkedListWalker, Walker};
+
+use fast_list::{LinkedList as FastLinkedList};
 use std::collections::LinkedList as StdLinkedList;
 use std::collections::VecDeque;
 use std::vec::Vec;
@@ -650,6 +653,7 @@ pub fn bench_list_iter(c: &mut Criterion) {
     // 10_000
     let mut group = c.benchmark_group("list_iter_10k");
     // fast-list
+    #[cfg(feature = "unstable")]
     bench!(
         group,
         "fast_list_iter_walker_10k",
@@ -787,6 +791,7 @@ pub fn bench_list_iter_reverse(c: &mut Criterion) {
     // 10_000
     let mut group = c.benchmark_group("list_iter_reverse_10k");
     // fast-list
+    #[cfg(feature = "unstable")]
     bench!(
         group,
         "fast_list_iter_reverse_walker_10k",
