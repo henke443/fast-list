@@ -120,7 +120,7 @@
 //! }
 //! ```
 //!
-//!  [`LinkedListWalker`] - **\[unstable\]** A walker type (like in petgraph) which can be used to iterate over the list.
+//!  `LinkedListWalker` - **\[feature = "unstable"\]** A walker type (like in petgraph) which can be used to iterate over the list.
 
 mod linked_list;
 mod walker;
