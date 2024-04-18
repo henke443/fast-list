@@ -52,6 +52,7 @@ impl<T> LinkedList<T> {
     }
 
     /// Get the first item in the list.
+    /// Can be None if the list is empty.
     #[inline]
     pub fn head(&self) -> Option<&LinkedListItem<T>> {
         if let Some(head) = self.head {
@@ -62,6 +63,7 @@ impl<T> LinkedList<T> {
     }
 
     /// Get a mutable reference to the first item in the list.
+    /// Can be None if the list is empty.
     #[inline]
     pub fn head_mut(&mut self) -> Option<&mut LinkedListItem<T>> {
         if let Some(head) = self.head {
@@ -72,6 +74,7 @@ impl<T> LinkedList<T> {
     }
 
     /// Get the last item in the list.
+    /// Can be None if the list is empty.
     #[inline]
     pub fn tail(&self) -> Option<&LinkedListItem<T>> {
         if let Some(tail) = self.tail {
@@ -82,6 +85,7 @@ impl<T> LinkedList<T> {
     }
 
     /// Get a mutable reference to the last item in the list.
+    /// Can be None if the list is empty.
     #[inline]
     pub fn tail_mut(&mut self) -> Option<&mut LinkedListItem<T>> {
         if let Some(tail) = self.tail {
@@ -91,12 +95,12 @@ impl<T> LinkedList<T> {
         }
     }
 
-    /// Returns a secondary map of type V
+    /// Convenience method to return a slotmap::SecondaryMap of type V
     pub fn new_data<V>(&self) -> SecondaryMap<LinkedListIndex, V> {
         SecondaryMap::new()
     }
 
-    /// Returns a sparse secondary map of type V
+    /// Convenience method to return a slotmap::SparseSecondaryMap of type V
     pub fn new_data_sparse<V>(&self) -> SparseSecondaryMap<LinkedListIndex, V> {
         SparseSecondaryMap::new()
     }
